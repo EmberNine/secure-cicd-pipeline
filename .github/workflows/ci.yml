@@ -5,7 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-    
+
 permissions:
   security-events: write
   actions: read
@@ -28,10 +28,10 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: python
-    - uses: github/codeql-action/analyze@v2
+    - uses: github/codeql-action/analyze@v3
 
     - name: Scan for secrets with Gitleaks
       uses: zricethezav/gitleaks-action@v2.2.0

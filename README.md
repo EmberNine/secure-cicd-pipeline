@@ -11,7 +11,7 @@ This project demonstrates a secure CI/CD pipeline that includes:
 
 ## Folder Structure
 - `.github/workflows/ci.yml`: The secure CI/CD pipeline definition.
-- `src/`: Contains a sample Python app.
+- `src/`: Contains a sample Python app. its just a print statement or something.
 - `Dockerfile`: Used to build a container image for the app.
 - `.gitleaks.toml`: Config for secrets scanning.
 
