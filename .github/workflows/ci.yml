@@ -1,0 +1,46 @@
+name: Secure CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: python
+    - uses: github/codeql-action/analyze@v2
+
+    - name: Scan for secrets with Gitleaks
+      uses: zricethezav/gitleaks-action@v2.2.0
+
+    - name: Trivy - Scan dependencies
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'
+        format: 'table'
+
+    - name: Build Docker image
+      run: docker build -t myapp .
+
+    - name: Trivy - Scan Docker image
+      run: trivy image --severity CRITICAL,HIGH myapp
